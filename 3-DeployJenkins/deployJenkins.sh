@@ -24,11 +24,15 @@ kubectl exec -it -n cicd $JENKINS_POD -- sed -i "s/JENKINS_URL_PLACEHOLDER/http:
 
 curl -s -XPOST http://$JENKINS_URL:$JENKINS_URL_PORT/createItem?name=DeploySockShop -u $JENKINS_USERNAME_DECODE:$JENKINS_PASSWORD_DECODE --data-binary @config.xml -H "Content-Type:text/xml"
 
-# add pligin http_request
+# add plugin http_request
+echo "Installing HTTP Request plugin..."
 curl -X POST -d '<jenkins><install plugin="http_request@latest" /></jenkins>' --header 'Content-Type: text/xml' http://$JENKINS_URL:$JENKINS_URL_PORT/pluginManager/installNecessaryPlugins -u $JENKINS_USERNAME_DECODE:$JENKINS_PASSWORD_DECODE
-# add pligin pipeline-utility-steps
-curl -X POST -d '<jenkins><install plugin="pipeline-utility-steps@latest" /></jenkins>' --header 'Content-Type: text/xml' http://$JENKINS_URL:$JENKINS_URL_PORT/pluginManager/installNecessaryPlugins -u $JENKINS_USERNAME_DECODE:$JENKINS_PASSWORD_DECODE
+sleep 5
 
+# add plugin http_request
+echo "Installing pipeline utility steps plugin..."
+curl -X POST -d '<jenkins><install plugin="pipeline-utility-steps@latest" /></jenkins>' --header 'Content-Type: text/xml' http://$JENKINS_URL:$JENKINS_URL_PORT/pluginManager/installNecessaryPlugins -u $JENKINS_USERNAME_DECODE:$JENKINS_PASSWORD_DECODE
+sleep 5
 
 #Restart Jenkins
 curl -X POST http://$JENKINS_URL:$JENKINS_URL_PORT/restart -u $JENKINS_USERNAME_DECODE:$JENKINS_PASSWORD_DECODE
