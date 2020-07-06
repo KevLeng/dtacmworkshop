@@ -48,6 +48,8 @@ spec:
             value: DT_TENANT_URL_PLACEHOLDER
           - name: DT_API_TOKEN
             value: DT_API_TOKEN_PLACEHOLDER
+          - name: KEPTN_BRIDGE
+            value: KEPTN_BRIDGE_PLACEHOLDER
         ports:
         - containerPort: 8080
         - containerPort: 50000
