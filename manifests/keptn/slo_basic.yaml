@@ -33,13 +33,13 @@
         warning:
           - criteria:
               - "<=+10%"
-       - sli: non_db_calls
-       - sli: db_calls
-       - sli: db_successful_connections
-       - sli: db_failed_connections
-       - sli: db_connections
-       - sli: errors_4xx
-       - sli: errors_5xx
+      - sli: non_db_calls
+      - sli: db_calls
+      - sli: db_successful_connections
+      - sli: db_failed_connections
+      - sli: db_connections
+      - sli: errors_4xx
+      - sli: errors_5xx
     total_score:
       pass: "90%"
       warning: "75%"
