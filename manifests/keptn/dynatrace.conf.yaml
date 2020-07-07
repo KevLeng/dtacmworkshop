@@ -6,5 +6,6 @@ attachRules:
   - meTypes:
     - SERVICE
     tags:
-    - context: CONTEXTLESS
-      key: $SERVICE
+    - context: KUBERNETES
+      key: app
+      value: $SERVICE
