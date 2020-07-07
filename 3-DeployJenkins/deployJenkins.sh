@@ -23,6 +23,7 @@ kubectl exec -it -n cicd $JENKINS_POD -- sed -i "s/JENKINS_SERVER_PLACEHOLDER/ht
 kubectl exec -it -n cicd $JENKINS_POD -- sed -i "s/JENKINS_URL_PLACEHOLDER/http:\/\/$POD_IP:8080/g" /var/jenkins_home/config.xml
 
 curl -s -XPOST http://$JENKINS_URL:$JENKINS_URL_PORT/createItem?name=DeploySockShop -u $JENKINS_USERNAME_DECODE:$JENKINS_PASSWORD_DECODE --data-binary @config.xml -H "Content-Type:text/xml"
+sleep 5
 
 # add plugin http_request
 echo "Installing HTTP Request plugin..."
