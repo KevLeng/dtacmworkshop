@@ -43,12 +43,12 @@ deployGKE()
     if [ $AG = 'Y' ] || [ $AG = 'y' ]
     then
         echo "Creating ActiveGate VM..."
-        gcloud compute instances create dtactivegate --zone=us-central1-a --machine-type=n1-standard-2 --metadata=tenant_id=$TENANTID,environment_id=$ENVIRONMENTID,paas_token=$PAAS_TOKEN --metadata-from-file startup-script=../utils/deployagsoftware.sh --image=debian-9-stretch-v20190916 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=dtactivegate --reservation-affinity=any
+        gcloud compute instances create dtactivegate --zone=australia-southeast1-a --machine-type=n1-standard-2 --metadata=tenant_id=$TENANTID,environment_id=$ENVIRONMENTID,paas_token=$PAAS_TOKEN --metadata-from-file startup-script=../utils/deployagsoftware.sh --image=debian-9-stretch-v20190916 --image-project=debian-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=dtactivegate --reservation-affinity=any
     fi
 
     echo "Creating GKE Cluster..."
 
-    gcloud container clusters create acmworkshop --zone=us-central1-a --num-nodes=3 --machine-type=n1-highmem-2 --image-type=Ubuntu
+    gcloud container clusters create acmworkshop --zone=australia-southeast1-a --num-nodes=3 --machine-type=n1-highmem-2 --image-type=Ubuntu
 
     kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud config get-value account)
 }
