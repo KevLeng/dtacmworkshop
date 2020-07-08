@@ -9,3 +9,6 @@ attachRules:
     - context: KUBERNETES
       key: app
       value: $SERVICE
+    - context: KUBERNETES
+      key: stage
+      value: $STAGE
