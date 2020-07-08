@@ -34,10 +34,15 @@
           - criteria:
               - "<=+10%"
       - sli: non_db_calls
+        weight: 0
+        pass:
+          - criteria:
+            - "<1"
       - sli: db_calls
-      - sli: db_successful_connections
-      - sli: db_failed_connections
-      - sli: db_connections
+        weight: 0
+        pass:
+          - criteria:
+            - ">1"
       - sli: errors_4xx
       - sli: errors_5xx
     total_score:
