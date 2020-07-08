@@ -2,5 +2,4 @@
 spec_version: '0.1.0'
 workloads:
   - teststrategy: performance
-    thinktime: 250
     script: jmeter/load.jmx    
