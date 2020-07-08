@@ -2,12 +2,12 @@
 spec_version: '1.0'
 indicators:
   throughput_svc: "metricSelector=builtin:service.requestCount.total:merge(0):sum&entitySelector=tag([KUBERNETES]app:$SERVICE),tag([KUBERNETES]stage:$STAGE),type(SERVICE)"
-  error_rate_svc: "metricSelector=builtin:service.errors.total.rate:merge(0):avg&entitySelector=tag([KUBERNETES]app:$SERVICE),type(SERVICE)"
-  rt_svc_p50:     "metricSelector=builtin:service.response.time:merge(0):percentile(50)&entitySelector=tag([KUBERNETES]app:$SERVICE),type(SERVICE)"
-  rt_svc_p90:     "metricSelector=builtin:service.response.time:merge(0):percentile(90)&entitySelector=tag([KUBERNETES]app:$SERVICE),type(SERVICE)"
-  rt_svc_p95:     "metricSelector=builtin:service.response.time:merge(0):percentile(95)&entitySelector=tag([KUBERNETES]app:$SERVICE),type(SERVICE)"
-  non_db_calls:   "metricSelector=builtin:service.nonDbChildCallCount:merge(0):sum&entitySelector=tag([KUBERNETES]app:$SERVICE),type(SERVICE)"
-  db_calls:     "metricSelector=builtin:service.dbChildCallCount:merge(0):sum&entitySelector=tag([KUBERNETES]app:$SERVICE),type(SERVICE)"
-  errors_4xx:     "metricSelector=builtin:service.errors.fourxx.count:merge(0):sum&entitySelector=tag([KUBERNETES]app:$SERVICE),type(SERVICE)"
-  errors_5xx:     "metricSelector=builtin:service.errors.fivexx.count:merge(0):sum&entitySelector=tag([KUBERNETES]app:$SERVICE),type(SERVICE)"
+  error_rate_svc: "metricSelector=builtin:service.errors.total.rate:merge(0):avg&entitySelector=tag([KUBERNETES]app:$SERVICE),tag([KUBERNETES]stage:$STAGE),type(SERVICE)"
+  rt_svc_p50:     "metricSelector=builtin:service.response.time:merge(0):percentile(50)&entitySelector=tag([KUBERNETES]app:$SERVICE),tag([KUBERNETES]stage:$STAGE),type(SERVICE)"
+  rt_svc_p90:     "metricSelector=builtin:service.response.time:merge(0):percentile(90)&entitySelector=tag([KUBERNETES]app:$SERVICE),tag([KUBERNETES]stage:$STAGE),type(SERVICE)"
+  rt_svc_p95:     "metricSelector=builtin:service.response.time:merge(0):percentile(95)&entitySelector=tag([KUBERNETES]app:$SERVICE),tag([KUBERNETES]stage:$STAGE),type(SERVICE)"
+  non_db_calls:   "metricSelector=builtin:service.nonDbChildCallCount:merge(0):sum&entitySelector=tag([KUBERNETES]app:$SERVICE),tag([KUBERNETES]stage:$STAGE),type(SERVICE)"
+  db_calls:     "metricSelector=builtin:service.dbChildCallCount:merge(0):sum&entitySelector=tag([KUBERNETES]app:$SERVICE),tag([KUBERNETES]stage:$STAGE),type(SERVICE)"
+  errors_4xx:     "metricSelector=builtin:service.errors.fourxx.count:merge(0):sum&entitySelector=tag([KUBERNETES]app:$SERVICE),tag([KUBERNETES]stage:$STAGE),type(SERVICE)"
+  errors_5xx:     "metricSelector=builtin:service.errors.fivexx.count:merge(0):sum&entitySelector=tag([KUBERNETES]app:$SERVICE),tag([KUBERNETES]stage:$STAGE),type(SERVICE)"
  
