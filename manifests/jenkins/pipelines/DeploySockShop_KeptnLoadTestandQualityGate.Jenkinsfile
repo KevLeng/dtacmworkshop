@@ -3,10 +3,10 @@ def keptn = new sh.keptn.Keptn()
 
 
 pipeline {
-    //agent {
-    //    label 'jenkins-slave'
-    //}
-    agent any
+    agent {
+        label 'jenkins-slave'
+    }
+    
     parameters {
         choice(name: 'BUILD', choices: ['One', 'Two'], description: 'Choose Build')
     }
