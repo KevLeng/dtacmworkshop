@@ -2,6 +2,7 @@
 
 FUNCTIONS_FILE_REPO="https://raw.githubusercontent.com/KevLeng/keptn-in-a-box/no-keptn-install/functions.sh"
 FUNCTIONS_FILE='functions.sh'
+FILE='creds_dt.json'
 DOMAIN=
 
 curl -o functions.sh $FUNCTIONS_FILE_REPO
@@ -9,14 +10,19 @@ curl -o functions.sh $FUNCTIONS_FILE_REPO
 # --- Loading the functions in the current shell
 source $FUNCTIONS_FILE
 
+printInfoSection "Read Dynatrace credentials"
+if [ -f "$KEPTN_IN_A_BOX_DIR/resources/dynatrace/{$FILE}" ]; then
+    CREDS=$(cat $KEPTN_IN_A_BOX_DIR/resources/dynatrace/$FILE)
+    DT_TENANT=$(echo $CREDS | jq -r '.dynatraceTenant')
+    DT_API_TOKEN=$(echo $CREDS | jq -r '.dynatraceApiToken')
+	DT_PAAS_TOKEN=$(echo $CREDS | jq -r '.dynatracePaaSToken')
+fi
+
 keptn_install=true
 keptn_install_qualitygates=false
 
 setupMagicDomainPublicIp
 keptnInstall
-
-printInfoSection "Ready Dynatrace credentials"
-bashas "cd $KEPTN_IN_A_BOX_DIR/resources/dynatrace/ ; bash save-credentials.sh show"
 	
 dynatrace_configure_monitoring=true
 dynatraceConfigureMonitoring
