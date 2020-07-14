@@ -14,21 +14,20 @@ export DT_TENANT_ID=$(cat ../1-Credentials/creds.json | jq -r '.dynatraceTenantI
 export DT_ENVIRONMENT_ID=$(cat ../1-Credentials/creds.json | jq -r '.dynatraceEnvironmentID')
 export DT_API_TOKEN=$(cat ../1-Credentials/creds.json | jq -r '.dynatraceApiToken')
 export DT_PAAS_TOKEN=$(cat ../1-Credentials/creds.json | jq -r '.dynatracePaaSToken')
-echo $DT_TENANT_ID
-echo $DT_ENVIRONMENT_ID
-echo $DT_API_TOKEN
-echo $DT_PAAS_TOKEN
 
-if [ -z "$DT_ENVIRONMENT_ID" ]
-then
-    echo "Environment ID Empty, SaaS Deployment"
-    export DT_TENANT_URL="https://$DT_TENANT_ID.live.dynatrace.com"
-else
-    echo "Environment ID is $DT_ENVIRONMENT_ID, Managed Deployment"
-    export DT_TENANT_URL="https://$DT_TENANT_ID.dynatrace-managed.com/e/$DT_ENVIRONMENT_ID"
-fi
+
+#if [ -z "$DT_ENVIRONMENT_ID" ]
+#then
+#    echo "Environment ID Empty, SaaS Deployment"
+#    export DT_TENANT_URL="https://$DT_TENANT_ID.live.dynatrace.com"
+#else
+#    echo "Environment ID is $DT_ENVIRONMENT_ID, Managed Deployment"
+#    export DT_TENANT_URL="https://$DT_TENANT_ID.dynatrace-managed.com/e/$DT_ENVIRONMENT_ID"
+#fi
 
 export DT_TENANT_URL="https://$DT_TENANT_ID"
+echo "Tenant URL:"
+echo $DT_TENANT_URL
 
 #export JENKINS_URL=$(kubectl describe svc jenkins -n cicd | grep IP: | sed 's/IP:[ \t]*//')
 #export TOWER_URL=$(kubectl describe svc ansible-tower -n tower | grep "LoadBalancer Ingress:" | sed 's/LoadBalancer Ingress:[ \t]*//')
