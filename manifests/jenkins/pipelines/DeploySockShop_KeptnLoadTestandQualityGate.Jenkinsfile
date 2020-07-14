@@ -60,24 +60,23 @@ pipeline {
         stage('Deploy to Staging'){
             steps{
                 container('kubectl'){
-                    echo 'Deployment build...'
+                    echo 'Deployment canary build...'
                     script{
                         if (params.BUILD == "One") {
-                            sh 'ls $WORKSPACE'
-                            sh 'kubectl apply -f $WORKSPACE/manifests/sockshop-app/dev/carts2.yml'
-                            echo "Waiting for carts service to start..."
-                            // need a method to check carts rediness
+                            sh 'ls ' + env.WORKSPACE
+                            sh 'kubectl apply -f ' + env.WORKSPACE + '/manifests/sockshop-app/dev/carts2.yml'
                         } else {
                             sh 'ls $WORKSPACE'
-                            sh 'kubectl apply -f $WORKSPACE/manifests/sockshop-app/canary/carts2-canary.yml'
+                            sh 'kubectl apply -f ' + env.WORKSPACE + '/manifests/sockshop-app/canary/carts2-canary.yml'
                             echo "Waiting for carts service to start..."
                         }
+                        echo 'Waiting for carts service to start...'
                         sleep 10
-                        container('kubectl'){
-                            echo "Get carts IP from kubectl..."
-                            cartsIp = sh (returnStdout:true, script:"kubectl describe svc carts -n dev | grep \'LoadBalancer Ingress:\' | sed \'s~LoadBalancer Ingress:[ \t]*~~\'").trim()
-                            echo "carts IP address is ${cartsIp}"
-                        }
+                        
+                        def cartsIp = sh (returnStdout:true, script:"kubectl get ingress dev-ingress -n dev  | grep -o carts.dev.*io,").trim()
+                        cartsIp = cartsIp.minus(",")
+                        echo "Carts IP Address is: " + cartsIp
+                        
                         def serviceResponse = ""
                         timeout(time: 10, unit: 'MINUTES') {
                             script {
@@ -85,12 +84,12 @@ pipeline {
                                     // get carts url 
                                     def response = httpRequest httpMode: 'GET', 
                                         responseHandle: 'STRING', 
-                                        url: "http://${cartsIp}/", 
-                                        validResponseCodes: "100:500"
+                                        url: 'http://' + cartsIp + '/', 
+                                        validResponseCodes: "100:505"
                     
                                     //The API returns a response code 500 error if the evalution done event does not exisit
                                     if (response.status != 200 ) {
-                                        echo "Waiting for carts service to start, ip address: ${cartsIp}"
+                                        echo 'Waiting for carts service to start, ip address: ' + cartsIp
                                         sleep 20
                                         return false
                                     } else {
@@ -110,45 +109,38 @@ pipeline {
                 container('kubectl'){
                     echo 'Get Carts URL'
                     script{
-                        dir("loadtest"){
-                            sh "chmod +x cartstest.sh"
-                            sh "./cartstest.sh"
-                            
+                        def cartsIp = sh (returnStdout:true, script:"kubectl get ingress dev-ingress -n dev  | grep -o carts.dev.*io,").trim()
+                        cartsIp = cartsIp.minus(",")
+                        echo "Carts IP Address is: " + cartsIp
+                        dir('loadtest'){
+                            sh 'chmod +x cartstest.sh'
+                            sh './cartstest.sh ' + cartsIp
+
                         }
-                    }
-                }
-                script{
-                    container('kubectl'){
-                         echo "Get carts IP from kubectl..."
-                         cartsIp = sh (returnStdout:true, script:"kubectl describe svc carts -n dev | grep \'LoadBalancer Ingress:\' | sed \'s~LoadBalancer Ingress:[ \t]*~~\'").trim()
-                         echo "carts IP address is ${cartsIp}"
-                    }
-                    
-                     if (params.BUILD == "One"){
+                        if (params.BUILD == "One"){
                             keptn.keptnAddResources('loadtest/carts_load1.jmx','jmeter/load.jmx')
-                        } else {
+                        } 
+                        else {
                             keptn.keptnAddResources('loadtest/carts_load2.jmx','jmeter/load.jmx')
                         }
-                    keptn.keptnAddResources('manifests/keptn/jmeter.conf.yaml','jmeter/jmeter.conf.yaml')
-                    archiveArtifacts artifacts:'loadtest/**/*.*'
-                    echo "Performance as a Self-Service: Triggering Keptn to execute Tests"
+                        keptn.keptnAddResources('manifests/keptn/jmeter.conf.yaml','jmeter/jmeter.conf.yaml')
+                        archiveArtifacts artifacts:'loadtest/**/*.*'
+                        echo "Performance as a Self-Service: Triggering Keptn to execute Tests"
 
-                    // send deployment finished to trigger tests
-                    def keptnContext = keptn.sendDeploymentFinishedEvent testStrategy:"performance", deploymentURI:cartsIp 
+                        // send deployment finished to trigger tests
+                        def keptnContext = keptn.sendDeploymentFinishedEvent testStrategy:"performance", deploymentURI:cartsIp 
 
-                    String keptn_bridge = env.KEPTN_BRIDGE
-                    echo "Open Keptns Bridge: ${keptn_bridge}/trace/${keptnContext}"
-
+                        String keptn_bridge = env.KEPTN_BRIDGE
+                        echo "Open Keptns Bridge: ${keptn_bridge}/trace/${keptnContext}"
+                    }
                 }
+
             }
         }
         stage('Trigger Quality Gate') {
             steps {
                 script{
-                    echo "Quality Gates ONLY: Just triggering an SLI/SLO-based evaluation for the passed timeframe"
-
-                    sleep 120
-                    waitTime = 2
+                    waitTime = 10
                     if(params.WaitForResult?.isInteger()) {
                         waitTime = params.WaitForResult.toInteger()
                     }
@@ -168,17 +160,16 @@ pipeline {
                 container('kubectl'){
                     echo 'Deploying to Production'
                     script{
-                        if (params.BUILD == "One") {
-                            sh 'ls $WORKSPACE'
-                            sh 'kubectl apply -f $WORKSPACE/manifests/sockshop-app/production/carts2.yml'
-                            echo "Waiting for carts service to start..."
-                            /// need to check carts rediness
-                        } else {
-                            sh 'ls $WORKSPACE'
-                            sh 'kubectl apply -f $WORKSPACE/manifests/sockshop-app/canary/carts2-badbuild.yml'
-                            echo "Waiting for carts service to start..."
+                        echo 'Deploying to Production'
+                        script{
+                            if (params.BUILD == 'One') {
+                                echo 'Waiting for carts service to start...'
+                                sleep 20
+                            } else {
+                                echo 'Waiting for carts service to start...'
+                                sleep 20
+                            }
                         }
-                        sleep 20
                     }
                 }
             }
