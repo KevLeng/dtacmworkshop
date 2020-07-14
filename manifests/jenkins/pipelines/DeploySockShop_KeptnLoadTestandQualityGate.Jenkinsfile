@@ -25,7 +25,7 @@ pipeline {
             
                     // Initialize the Keptn Project
                     //keptn.keptnInit project:"${params.Project}", service:"${params.Service}", stage:"${params.Stage}", monitoring:"${monitoring}" // , shipyard:'shipyard.yaml'
-                    keptn.keptnInit project:"krl-ace", service:"carts", stage:"dev", monitoring:"dynatrace" // , shipyard:'shipyard.yaml'
+                    keptn.keptnInit project:"ace", service:"carts", stage:"dev", monitoring:"dynatrace" // , shipyard:'shipyard.yaml'
             
                     // Upload all the files
                     keptn.keptnAddResources('manifests/keptn/dynatrace.conf.yaml','dynatrace/dynatrace.conf.yaml')
@@ -38,21 +38,21 @@ pipeline {
         }
         stage('Build Code') {
             steps{
-                container('mvn'){
+                script{
                     echo 'Code Building...'
                 }
             }
         }
         stage('Build Image'){
             steps{
-                container('docker'){
+                script{
                     echo 'Image Building...'
                 }
             }
         }
         stage('Push Image to Repo'){
             steps{
-                container('docker'){
+                script{
                     echo 'Pushing Image...'
                 }
             }
@@ -61,14 +61,13 @@ pipeline {
             steps{
                 container('kubectl'){
                     echo 'Deployment canary build...'
+
                     script{
-                        if (params.BUILD == "One") {
+                        if (params.BUILD == 'One') {
                             sh 'ls ' + env.WORKSPACE
                             sh 'kubectl apply -f ' + env.WORKSPACE + '/manifests/sockshop-app/dev/carts2.yml'
                         } else {
-                            sh 'ls $WORKSPACE'
                             sh 'kubectl apply -f ' + env.WORKSPACE + '/manifests/sockshop-app/canary/carts2-canary.yml'
-                            echo "Waiting for carts service to start..."
                         }
                         echo 'Waiting for carts service to start...'
                         sleep 10
@@ -104,7 +103,7 @@ pipeline {
                 }
             }
         }
-        stage ('Run Load Test'){
+        stage ('Trigger Load Test'){
             steps{
                 container('kubectl'){
                     echo 'Get Carts URL'
@@ -137,7 +136,7 @@ pipeline {
 
             }
         }
-        stage('Trigger Quality Gate') {
+        stage('Evaluate Quality Gate') {
             steps {
                 script{
                     waitTime = 10
