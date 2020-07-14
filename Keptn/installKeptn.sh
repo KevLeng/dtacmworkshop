@@ -15,6 +15,12 @@ keptn_install_qualitygates=false
 setupMagicDomainPublicIp
 keptnInstall
 
+printInfoSection "Ready Dynatrace credentials"
+bashas "cd $KEPTN_IN_A_BOX_DIR/resources/dynatrace/ ; bash save-credentials.sh show"
+	
+dynatrace_configure_monitoring=true
+dynatraceConfigureMonitoring
+
 KEPTN_API_TOKEN=$(kubectl get secret keptn-api-token -n keptn -ojsonpath={.data.keptn-api-token} | base64 --decode)
 KEPTN_ENDPOINT="https://api.keptn.$DOMAIN"
 KEPTN_BRIDGE="http://bridge.keptn.$DOMAIN"
@@ -22,5 +28,9 @@ KEPTN_BRIDGE="http://bridge.keptn.$DOMAIN"
 printInfo "KEPTN_BRIDGE: ${KEPTN_BRIDGE}"
 printInfo "KEPTN_ENDPOINT: ${KEPTN_ENDPOINT}"
 printInfo "KEPTN_API_TOKEN: ${KEPTN_API_TOKEN}"
+
+echo "Dynatrace Tenant (DT_TENANT): $DT_TENANT"
+echo "Dynatrace API Token (DT_API_TOKEN): $DT_API_TOKEN"
+echo "Dynatrace PaaS Token (DT_PAAS_TOKEN): $DT_PAAS_TOKEN"
 
 rm $FUNCTIONS_FILE
