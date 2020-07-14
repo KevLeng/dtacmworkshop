@@ -36,8 +36,9 @@ KEPTN_API_TOKEN=$(kubectl get secret keptn-api-token -n keptn -ojsonpath={.data.
 KEPTN_ENDPOINT="https://api.keptn.$DOMAIN"
 KEPTN_BRIDGE="http://bridge.keptn.$DOMAIN"
 
-echo "KEPTN_BRIDGE:${KEPTN_BRIDGE}"
-echo "KEPTN_ENDPOINT:${KEPTN_ENDPOINT}"
+printInfo "KEPTN_BRIDGE: ${KEPTN_BRIDGE}"
+printInfo "KEPTN_ENDPOINT: ${KEPTN_ENDPOINT}"
+printInfo "KEPTN_API_TOKEN: ${KEPTN_API_TOKEN}"
 echo "KEPTN_API_TOKEN:${KEPTN_API_TOKEN}"
 
 rm $FUNCTIONS_FILE
