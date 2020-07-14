@@ -27,6 +27,8 @@ else
     export DT_TENANT_URL="https://$DT_TENANT_ID.dynatrace-managed.com/e/$DT_ENVIRONMENT_ID"
 fi
 
+export DT_TENANT_URL="https://$DT_TENANT_ID"
+
 #export JENKINS_URL=$(kubectl describe svc jenkins -n cicd | grep IP: | sed 's/IP:[ \t]*//')
 #export TOWER_URL=$(kubectl describe svc ansible-tower -n tower | grep "LoadBalancer Ingress:" | sed 's/LoadBalancer Ingress:[ \t]*//')
 export TOWER_URL=$(kubectl get ingress tower-ingress -n tower  | grep -o "ansible.*io")
