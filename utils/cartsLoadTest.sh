@@ -20,7 +20,7 @@ do
     fi
 done
 
-export CARTS_URL=$(kubectl describe svc carts -n production | grep "LoadBalancer Ingress:" | sed 's/LoadBalancer Ingress:[ \t]*//')
+export CARTS_URL=$(kubectl get ingress production-ingress -n production  | grep -o "carts.production.*io," | sed 's/,//')
 
 i=0
 while true
