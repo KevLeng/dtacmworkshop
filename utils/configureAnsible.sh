@@ -34,7 +34,7 @@ echo $DT_TENANT_URL
 export TOWER_URL=$(sudo kubectl get ingress tower-ingress -n tower  | grep -o "ansible.*io")
 echo "Tower URL:"
 echo $TOWER_URL
-sleep 60
+#sleep 60
 export DTAPICREDTYPE=$(curl -k -X POST https://$TOWER_URL/api/v2/credential_types/ --user admin:dynatrace -H "Content-Type: application/json" \
 --data '{
   "name": "dt-api",
