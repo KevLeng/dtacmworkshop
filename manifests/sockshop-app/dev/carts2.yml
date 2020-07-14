@@ -52,7 +52,7 @@ spec:
           httpGet:
             path: /carts/1/items/health
             port: 8080
-          initialDelaySeconds: 240
+          initialDelaySeconds: 15
           periodSeconds: 10
           timeoutSeconds: 15
       volumes:
