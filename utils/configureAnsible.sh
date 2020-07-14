@@ -7,7 +7,8 @@
 
 #export CART_URL=$(kubectl describe svc carts -n production | grep "LoadBalancer Ingress:" | sed 's/LoadBalancer Ingress:[ \t]*//')
 export CART_URL=$(kubectl get ingress production-ingress -n production  | grep -o "carts.production.*io," | sed 's/,//')
-
+echo "Carts URL:"
+echo $CART_URL
 
 export DT_TENANT_ID=$(cat ../1-Credentials/creds.json | jq -r '.dynatraceTenantID')
 export DT_ENVIRONMENT_ID=$(cat ../1-Credentials/creds.json | jq -r '.dynatraceEnvironmentID')
@@ -32,6 +33,8 @@ export DT_TENANT_URL="https://$DT_TENANT_ID"
 #export JENKINS_URL=$(kubectl describe svc jenkins -n cicd | grep IP: | sed 's/IP:[ \t]*//')
 #export TOWER_URL=$(kubectl describe svc ansible-tower -n tower | grep "LoadBalancer Ingress:" | sed 's/LoadBalancer Ingress:[ \t]*//')
 export TOWER_URL=$(kubectl get ingress tower-ingress -n tower  | grep -o "ansible.*io")
+echo "Tower URL:"
+echo $TOWER_URL
 
 export DTAPICREDTYPE=$(curl -k -X POST https://$TOWER_URL/api/v2/credential_types/ --user admin:dynatrace -H "Content-Type: application/json" \
 --data '{
