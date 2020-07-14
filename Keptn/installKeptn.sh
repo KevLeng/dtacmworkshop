@@ -17,7 +17,6 @@ DT_TENANT=$(echo $CREDS | jq -r '.dynatraceTenant')
 DT_API_TOKEN=$(echo $CREDS | jq -r '.dynatraceApiToken')
 DT_PAAS_TOKEN=$(echo $CREDS | jq -r '.dynatracePaaSToken')
 
-
 keptn_install=true
 keptn_install_qualitygates=false
 
