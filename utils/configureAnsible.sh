@@ -13,10 +13,10 @@ export DT_TENANT_ID=$(cat ../1-Credentials/creds.json | jq -r '.dynatraceTenantI
 export DT_ENVIRONMENT_ID=$(cat ../1-Credentials/creds.json | jq -r '.dynatraceEnvironmentID')
 export DT_API_TOKEN=$(cat ../1-Credentials/creds.json | jq -r '.dynatraceApiToken')
 export DT_PAAS_TOKEN=$(cat ../1-Credentials/creds.json | jq -r '.dynatracePaaSToken')
-echo DT_TENANT_ID
-echo DT_ENVIRONMENT_ID
-echo DT_API_TOKEN
-echo DT_PAAS_TOKEN
+echo $DT_TENANT_ID
+echo $DT_ENVIRONMENT_ID
+echo $DT_API_TOKEN
+echo $DT_PAAS_TOKEN
 
 if [ -z "$DT_ENVIRONMENT_ID" ]
 then
