@@ -14,8 +14,8 @@ pipeline {
     stages{
         stage('Checkout code'){
             steps{
-                //git 'https://github.com/dynatrace-acm/dtacmworkshop.git'
                 git 'https://github.com/KevLeng/dtacmworkshop.git'
+                sh 'ls ' + env.WORKSPACE
             }
         }
         stage('Initialize Keptn') {
